@@ -1,8 +1,11 @@
 import chromadb
 
 
-client = chromadb.Client()
+client = chromadb.PersistentClient(
+    path="./data/chroma_db"
+)
 
+print("Chroma path: ./data/chroma_db")
 
 def create_collection(collection_name="infosys_financial_rag"):
     collection = client.get_or_create_collection(
@@ -10,6 +13,8 @@ def create_collection(collection_name="infosys_financial_rag"):
     )
 
     return collection
+
+
 
 def add_documents(collection, documents, vectors):
     ids = [f"chunk_{i}" for i in range(len(documents))]
