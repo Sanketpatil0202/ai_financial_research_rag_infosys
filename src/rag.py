@@ -60,3 +60,19 @@ def rag_answer(question):
     answer = generate_answer(question, context)
 
     return answer, reranked
+
+def format_sources(sources):
+    formatted = ["Sources:"]
+
+    for source in sources[:3]:
+        formatted.append(
+            f"- Infosys Annual Report {source['report']} | Page {source['page_no']}"
+        )
+
+    return "\n".join(formatted)
+
+def final_response(question):
+    answer, sources = rag_answer(question)
+    source_text = format_sources(sources)
+
+    return f"{answer}\n\n{source_text}"
