@@ -11,6 +11,21 @@ llm = ChatGroq(
     temperature=0
 )
 
+def rewrite_query(question):
+    prompt = f"""
+Rewrite the user's question into a clear and specific financial research query.
+
+Keep the original meaning.
+Do not answer the question.
+Return only the rewritten query.
+
+User question:
+{question}
+"""
+
+    response = llm.invoke(prompt)
+    return response.content.strip()
+
 def build_context(results):
     context = "\n\n---\n\n".join(
         f"Report: {item['report']}\n"
@@ -54,10 +69,21 @@ def generate_answer(question, context):
 
 
 def rag_answer(question):
-    results = retrieve_documents(collection, embedding_model, question)
-    reranked = rerank_documents(question, results)
+    rewritten_question = rewrite_query(question)
+
+    results = retrieve_documents(
+        collection,
+        embedding_model,
+        rewritten_question
+    )
+
+    reranked = rerank_documents(
+        rewritten_question,
+        results
+    )
+
     context = build_context(reranked)
-    answer = generate_answer(question, context)
+    answer = generate_answer(rewritten_question, context)
 
     return answer, reranked
 
