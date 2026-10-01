@@ -11,11 +11,20 @@ app = FastAPI(
     version="1.0.0"
 )
 
-from pydantic import BaseModel
+
+
+from pydantic import BaseModel, Field,field_validator
 
 
 class QuestionRequest(BaseModel):
-    question: str
+    question: str = Field(..., min_length=1)
+
+    @field_validator("question")
+    @classmethod
+    def validate_question(cls, value):
+        if not value.strip():
+            raise ValueError("Question cannot be empty")
+        return value.strip() 
 
 @app.post("/ask")
 def ask_question(request: QuestionRequest):
