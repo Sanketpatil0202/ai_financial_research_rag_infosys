@@ -10,7 +10,7 @@ Built with Python, LangChain, ChromaDB, Sentence Transformers, Groq LLMs, FastAP
 - Retrieval-Augmented Generation (RAG) pipeline
 - Semantic search using Sentence Transformer embeddings
 - Persistent ChromaDB vector database
-- Cross-encoder reranking for retrieved documents
+- Cross-Encoder reranking for retrieved documents
 - Query rewriting for improved retrieval
 - Year-aware financial answer generation
 - Source and page references in responses
@@ -36,6 +36,7 @@ Top Relevant Context
 Groq LLM
       ↓
 Answer + Source References
+```
 
 ## Tech Stack
 
@@ -79,7 +80,9 @@ ai_financial_research_rag_infosys/
 ├── pyproject.toml
 ├── requirements.txt
 └── README.md
+```
 
+> **Note:** `.env` is used locally for API keys and should never contain a real API key in GitHub.
 
 ## How It Works
 
@@ -107,10 +110,9 @@ ai_financial_research_rag_infosys/
 8. **Source References**  
    The application returns the relevant Infosys annual report and page numbers alongside the answer.
 
+## Evaluation
 
-   ## Evaluation
-
-The RAG pipeline was evaluated using a set of financial question-answering test cases based on the Infosys annual reports.
+The RAG pipeline was evaluated using financial question-answering test cases based on the Infosys annual reports.
 
 | Metric | Result |
 |---|---:|
@@ -118,7 +120,7 @@ The RAG pipeline was evaluated using a set of financial question-answering test 
 | Recall@3 | 100% |
 | MRR@3 | 53.33% |
 
-The evaluation focused on whether the system could retrieve the relevant annual-report information and generate an answer corresponding to the correct financial year.
+The evaluation focused on retrieval quality and whether the generated answer corresponded to the correct financial year.
 
 ## Running the Project
 
@@ -126,25 +128,54 @@ The evaluation focused on whether the system could retrieve the relevant annual-
 
 ```bash
 git clone https://github.com/Sanketpatil0202/ai_financial_research_rag_infosys.git
-
 cd ai_financial_research_rag_infosys
+```
 
+### 2. Create the environment
+
+```bash
 uv venv
+```
 
+### 3. Activate the environment on Windows
+
+```bash
 .venv\Scripts\activate
+```
 
+### 4. Install dependencies
+
+```bash
 uv sync
+```
 
+### 5. Configure environment variables
+
+Create a `.env` file in the project root:
+
+```env
 GROQ_API_KEY=your_groq_api_key
+```
 
+Never commit your real API key to GitHub.
+
+### 6. Run the Streamlit application
+
+```bash
 uv run streamlit run app/streamlit_app.py
+```
 
+### 7. Run the FastAPI application
+
+```bash
 uv run uvicorn app.api:app --reload
+```
 
+The interactive API documentation is available at:
 
-**One important correction:** Don't put your real API key in the README or GitHub. Only use the placeholder shown above.
-
-Save it and tell me **done**.
+```text
+http://127.0.0.1:8000/docs
+```
 
 ## API Usage
 
@@ -154,13 +185,19 @@ The project provides a FastAPI endpoint for querying the financial research assi
 
 ```http
 POST /ask
+```
 
-Request
+### Request
+
+```json
 {
   "question": "What was the consolidated revenue of Infosys in FY2024?"
 }
+```
 
-Response
+### Response
+
+```json
 {
   "question": "What was the consolidated revenue of Infosys in FY2024?",
   "answer": "Infosys Ltd.’s consolidated revenue from operations for fiscal year 2024 was ₹1,53,670 crore.",
@@ -179,9 +216,7 @@ Response
     }
   ]
 }
-
-Interactive API documentation is available at:
-http://127.0.0.1:8000/docs
+```
 
 ## Git Workflow
 
@@ -194,6 +229,14 @@ git status
 git add .
 git commit -m "Describe the change"
 git push origin main
+```
+
+- `git status` — Check modified and untracked files.
+- `git add .` — Stage changes for the next commit.
+- `git commit -m "..."` — Save a meaningful version of the changes.
+- `git push origin main` — Upload commits to GitHub.
+
+The project was developed using milestone-based commits so that major additions and improvements are tracked separately.
 
 ## Future Improvements
 
@@ -203,7 +246,6 @@ git push origin main
 - Add Docker support for easier deployment
 - Deploy the Streamlit frontend and FastAPI backend
 - Add authentication and request logging for production use
-
 
 ## Project Highlights
 
